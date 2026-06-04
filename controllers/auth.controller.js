@@ -9,9 +9,9 @@ export const signUp = async (req, res, next) => {
     session.startTransaction()
     try {
         const {name, email, password} = req.body
-        const existngUser = await User.findOne({email})
+        const existingUser = await User.findOne({email})
 
-        if (existngUser) {
+        if (existingUser) {
             const error = new Error("user already exists")
             error.statusCode = 409
             throw error
@@ -27,11 +27,8 @@ export const signUp = async (req, res, next) => {
         await session.endSession()
 
         res.status(201).json({
-            success: true,
-            message: "User created successfully",
-            data:   {
-                token,
-                user: newUsers[0]
+            success: true, message: "User created successfully", data: {
+                token, user: newUsers[0]
             }
         })
     } catch (error) {
@@ -41,8 +38,39 @@ export const signUp = async (req, res, next) => {
     }
 }
 export const signIn = async (req, res, next) => {
+    try {
+        const {email, password} = req.body
 
+        const user = await User.findOne({email}).select('+password')
+        if (!user) {
+            const error = new Error('user not found')
+            error.statusCode = 404
+            throw error
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if (!isPasswordValid) {
+            const error = new Error('Invalid password')
+            error.statusCode = 401
+            throw error
+        }
+
+        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN})
+
+        res.status(200).json({
+            success: true,
+            message: 'Successfully logged in',
+            data: {
+                token, user
+            }
+        })
+
+    } catch (error) {
+        next(error)
+    }
 }
 export const signOut = async (req, res, next) => {
+    console.log(req)
+    console.log(res)
+    console.log(next)
 
 }
