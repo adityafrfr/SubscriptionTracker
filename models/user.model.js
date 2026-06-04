@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,4})+$/, 'Enter a valid email']
     },
-    password: {type: String, required: [true, 'password is required'], minlength: 8,}
+    password: {type: String, required: [true, 'password is required'], minlength: 8, select: false}
 }, {timestamps: true})
 
 const User = mongoose.model('User', userSchema)
