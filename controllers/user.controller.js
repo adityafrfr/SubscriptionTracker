@@ -32,3 +32,21 @@ export const getUser = async (req, res, next) => {
         next(error)
     }
 }
+
+export const updateUser = async (req, res, next) => {
+    try {
+        const { name, email } = req.body
+        if (req.user._id.toString() !== req.params.id) {
+            const error = new Error('you are not the owner of this account')
+            error.statusCode = 401
+            throw error
+        }
+        const newUser = await User.findByIdAndUpdate(req.params.id, {name, email}, {new:true, runValidators:true})
+        res.status(200).json({
+            success: true,
+            data: newUser
+        })
+    } catch (error) {
+        next(error)
+    }
+}
