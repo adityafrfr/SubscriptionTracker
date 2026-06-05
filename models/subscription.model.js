@@ -32,7 +32,7 @@ const subscriptionSchema = new mongoose.Schema({
     startDate: {
         type: Date, required: true, validate: {
             validator: (value) => value <= new Date(),
-            message: 'Start date cant be in past'
+            message: 'Start date cant be in future'
         }
     },
 
@@ -66,8 +66,6 @@ subscriptionSchema.pre('save', function (next) {
     if (this.renewalDate < new Date()) {
         this.status = 'expired'
     }
-
-    next()
 })
 
 const Subscription = mongoose.model('Subscription', subscriptionSchema)

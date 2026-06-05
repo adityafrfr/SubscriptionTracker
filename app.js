@@ -22,8 +22,13 @@ app.use(errorMiddleware)
 app.get('/', (req, res) => {
     res.send('Welcome to subscription server api')
 })
-app.listen(PORT, async () => {
-    console.log(`subscription tracker api is live on http://localhost:${PORT}`)
+const startServer = async () => {
     await connectToDatabase()
-})
+
+    app.listen(PORT, () => {
+        console.log(`Server running on ${PORT}`)
+    })
+}
+
+startServer()
 export default app
