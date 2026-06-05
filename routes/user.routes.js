@@ -6,10 +6,6 @@ userRouter.get(`/`, getUsers)
 
 userRouter.get(`/:id`,authorize, getUser)
 
-userRouter.post(`/`, (req, res) => {
-    res.send({title: 'Create new user   '})
-})
-
 userRouter.put(`/:id`, (req, res) => {
     res.send({title: 'Update user'})
 })

@@ -18,7 +18,7 @@ export const getUserSubscriptions = async (req, res, next) => {
     try {
         if (req.user._id.toString() !== req.params.id) {
             const error = new Error('you are not the owner of this account')
-            error.status = 401
+            error.statusCode = 401
             throw error
         }
 
@@ -26,6 +26,24 @@ export const getUserSubscriptions = async (req, res, next) => {
         res.status(200).json({
             success: true, data: subscriptions
         })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getAllSubscriptions = async (req, res, next) => {
+    try {
+        if (req.user.role !== 'admin') {
+            const error = new Error('you are not authorised to access this')
+            error.statusCode = 401
+            throw error
+        }
+        const subscriptions = await Subscription.find({})
+        res.status(200).json({
+            success: true,
+            data: subscriptions
+        })
+
     } catch (error) {
         next(error)
     }
