@@ -18,16 +18,18 @@ subscriptionsRouter.put(`/:id`, (req, res) => {
     res.send({title: 'Update a subscription'})
 })
 
+subscriptionsRouter.get(`/users/:id`,authorize, getUserSubscriptions)
+
 subscriptionsRouter.delete(`/:id`, (req, res) => {
     res.send({title: 'delete subscription'})
 })
 
-subscriptionsRouter.get(`/users/:id`,authorize, getUserSubscriptions)
-
 subscriptionsRouter.put(`/:id/cancel`, (req, res) => {
     res.send({title: 'cancel subscriptions'})
 })
+
 subscriptionsRouter.put(`/upcoming-renewals`, (req, res) => {
     res.send({title: 'get all upcoming renewals'})
 })
+
 export default subscriptionsRouter
