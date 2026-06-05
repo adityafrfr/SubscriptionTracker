@@ -41,7 +41,7 @@ export const signIn = async (req, res, next) => {
     try {
         const {email, password} = req.body
 
-        const user = await User.findOne({email}).select('+password')
+        const user = await User.findOne({email, isDeleted: false}).select('+password')
         if (!user) {
             const error = new Error('user not found')
             error.statusCode = 404

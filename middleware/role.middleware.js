@@ -4,6 +4,8 @@ const authorizeRole = (...roles) => (req, res, next)    => {
         error.statusCode = 403
         next(error)
     }
+
+    next()
 }
 
 export default authorizeRole
